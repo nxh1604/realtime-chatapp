@@ -1,6 +1,8 @@
 import { Button } from "@/components/ui/button";
+import redis from "@/lib/db";
 
-export default function Page() {
+export default async function Page() {
+  const data = await redis.set("key", "value");
   return (
     <div>
       <Button>
