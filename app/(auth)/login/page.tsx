@@ -4,17 +4,21 @@ import { Button } from "@/components/ui/button";
 import { signIn, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import toast from "react-hot-toast";
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { LuLoader2 } from "react-icons/lu";
 
 export default function Page() {
+<<<<<<< HEAD
   const props = useSession();
   // console.log(props);
+=======
+>>>>>>> 854a706275b3b94216c1c77d977f2c2e7e62dce0
   const [isloading, setIsloading] = useState(false);
-  const handleSignInWith = async (provider: "google" | "github") => {
+
+  const handleSignInWith = useCallback(async (provider: "google" | "github") => {
     setIsloading(true);
     try {
       await signIn(provider);
@@ -24,7 +28,7 @@ export default function Page() {
     } finally {
       setIsloading(false);
     }
-  };
+  }, []);
 
   return (
     <main className="flex sm:gap-8 md:p-8 flex-col-reverse md:flex-row md:flex-nowrap p-4 gap-4 items-center">
