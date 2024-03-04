@@ -12,7 +12,7 @@ import { LuLoader2 } from "react-icons/lu";
 
 export default function Page() {
   const props = useSession();
-  console.log(props);
+  // console.log(props);
   const [isloading, setIsloading] = useState(false);
   const handleSignInWith = async (provider: "google" | "github") => {
     setIsloading(true);
@@ -83,7 +83,8 @@ export default function Page() {
                 <Button
                   className="bg-[#F3F9FA] sm:pl-[92.5px] sm:justify-start text-black flex-1 sm:w-full gap-4 hover:bg-slate-300"
                   disabled={isloading}
-                  onClick={() => handleSignInWith("google")}>
+                  onClick={() => handleSignInWith("google")}
+                >
                   <FcGoogle className="w-7 h-7 " />
                   <p className="hidden sm:block">
                     Sign in with <span>Google</span>
@@ -93,7 +94,8 @@ export default function Page() {
                 <Button
                   className="bg-[#F3F9FA] sm:pl-[92.5px] sm:justify-start text-black flex-1 sm:w-full gap-4 hover:bg-slate-300"
                   disabled={isloading}
-                  onClick={() => handleSignInWith("github")}>
+                  onClick={() => handleSignInWith("github")}
+                >
                   <FaGithub className="w-7 h-7 " />
                   <p className="hidden sm:block">
                     Sign in with <span>Github</span>
