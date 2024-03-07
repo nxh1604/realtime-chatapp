@@ -1,13 +1,15 @@
-<<<<<<< HEAD
-import { auth } from "@/lib/auth";
+import { fetchFriendRequests } from "@/lib/data";
 
 export default async function Page() {
-  const authData = await auth();
-  if (!authData) return null;
-  console.log(authData);
-  return <main>asd</main>;
-=======
-export default async function Page() {
-  return <main>Dashboard page</main>;
->>>>>>> 854a706275b3b94216c1c77d977f2c2e7e62dce0
+  const requests = await fetchFriendRequests();
+
+  if (!requests) return <main>Empty friend requets...</main>;
+
+  return (
+    <main>
+      {requests?.map((request) => (
+        <div key={request}>{request}</div>
+      ))}
+    </main>
+  );
 }

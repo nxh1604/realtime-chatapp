@@ -11,11 +11,6 @@ import { FcGoogle } from "react-icons/fc";
 import { LuLoader2 } from "react-icons/lu";
 
 export default function Page() {
-<<<<<<< HEAD
-  const props = useSession();
-  // console.log(props);
-=======
->>>>>>> 854a706275b3b94216c1c77d977f2c2e7e62dce0
   const [isloading, setIsloading] = useState(false);
 
   const handleSignInWith = useCallback(async (provider: "google" | "github") => {
