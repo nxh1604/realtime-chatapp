@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { signIn, useSession } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useState } from "react";
@@ -18,7 +18,6 @@ export default function Page() {
     try {
       await signIn(provider);
     } catch (error) {
-      console.log(error);
       toast.error(`Failed to sign in with ${provider.substring(0, 1).toUpperCase() + provider.substring(1)}`);
     } finally {
       setIsloading(false);
