@@ -11,14 +11,14 @@ export const POST = async (req: NextRequest) => {
 
     // check authourized
     const authData = await auth();
-    
+
     if (!authData) {
       return new NextResponse(JSON.stringify({ message: "Unauthorized" }), { status: 401 });
     }
-    
+
     // check added user existen?
     const getUserIdToAdd = await redis.get(`user:email:${validatedEmail.email}`);
-    
+
     if (!getUserIdToAdd) {
       return new NextResponse(JSON.stringify({ message: "Email does not exist" }), { status: 400 });
     }
@@ -48,10 +48,9 @@ export const POST = async (req: NextRequest) => {
     await redis.sadd(`user:${getUserIdToAdd}:incoming_friend_requests`, authData.user.id);
 
     return new NextResponse(JSON.stringify({ message: "OK" }), { status: 200 });
-    
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return new NextResponse(JSON.stringify({ message: "invalid email address" }), { status: 400 });
+      return new NextResponse(JSON.stringify({ message: "invalid payload" }), { status: 422 });
     }
 
     return new NextResponse(JSON.stringify({ message: "Invalid request" }), { status: 400 });

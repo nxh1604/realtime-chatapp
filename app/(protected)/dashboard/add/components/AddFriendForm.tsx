@@ -8,18 +8,21 @@ import { z } from "zod";
 
 import toast from "react-hot-toast";
 import { LuLoader } from "react-icons/lu";
+import { useState } from "react";
 
 const AddFriendForm = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const {
     register,
     setError,
-    formState: { errors, isLoading },
+    formState: { errors, isLoading: formIsLoading },
     handleSubmit,
   } = useForm<AddFriendDataType>({
     resolver: zodResolver(addFriendValidator),
   });
 
   const addFriend = async (email: string) => {
+    setIsLoading(true);
     try {
       const validatedEmail = addFriendValidator.parse({ email });
 
@@ -44,18 +47,16 @@ const AddFriendForm = () => {
             throw new Error(error.message);
         }
       }
-      const data = await res.json();
-      console.log(data);
       toast.success("Friend request sent!");
     } catch (error) {
       if (error instanceof z.ZodError) {
         setError("email", { message: error.message });
-        console.log(error);
       }
       if (error instanceof Error) {
         setError("email", { message: error.message });
-        console.log(error);
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -69,7 +70,7 @@ const AddFriendForm = () => {
       <div className="space-x-1">
         <input
           id="email"
-          className="disabled:bg-slate-300 bg-[#F7FBFF] mt-[2px] py-2 px-4 outline-indigo-500 outline-2 rounded-lg border-[1px] border-[#D4D7E3]"
+          className="disabled:bg-slate-400 bg-[#F7FBFF] mt-[2px] py-2 px-4 outline-indigo-500 outline-2 rounded-lg border-[1px] border-[#D4D7E3]"
           placeholder="you@example.com"
           disabled={isLoading}
           type="email"
@@ -77,7 +78,7 @@ const AddFriendForm = () => {
           autoComplete="off"
           {...register("email")}
         />
-        <Button type="submit" className="gap-2">
+        <Button type="submit" className="gap-2" disabled={isLoading}>
           Add friend {isLoading && <LuLoader className="animate-spin" />}
         </Button>
       </div>
