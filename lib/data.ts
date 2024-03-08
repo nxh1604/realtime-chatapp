@@ -1,13 +1,3 @@
-<<<<<<< HEAD
-import { auth } from "./auth";
-import redis from "./db";
-
-export const fetchFriendRequests = async () => {
-  const session = await auth();
-  if (!session) return null;
-
-  return await redis.smembers(`user:${session.user.id}:incoming_friend_requests`);
-=======
 "use server";
 import redis from "./db";
 
@@ -83,5 +73,4 @@ export const getFriends = async (userId: string) => {
     console.log("friends-GET error: ", error);
     return null;
   }
->>>>>>> c6ab1a03a040cade5008ae6a2f7db0d7e23a6457
 };

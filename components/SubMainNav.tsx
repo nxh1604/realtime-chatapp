@@ -14,12 +14,7 @@ const SubMainNav = async () => {
       <ul className="flex flex-col w-full">
         {subMainNavOptions.map((option) => (
           <li key={option.name}>
-            <SubNavItem
-              href={option.href}
-              Icon={option.Icon}
-              textLink={option.name}
-              countRequests={friendRequestsLength}
-            />
+            <SubNavItem href={option.href} Icon={option.Icon} textLink={option.name} countRequests={friendRequestsLength} />
           </li>
         ))}
       </ul>
@@ -47,23 +42,11 @@ const subMainNavOptions = [
   },
 ];
 
-const SubNavItem = ({
-  href,
-  Icon,
-  textLink,
-  countRequests,
-}: {
-  countRequests?: number;
-  textLink: string;
-  href: string;
-  Icon: JSX.Element;
-}) => {
+const SubNavItem = ({ href, Icon, textLink, countRequests }: { countRequests?: number; textLink: string; href: string; Icon: JSX.Element }) => {
   const getLinkPath = href.split("/").at(-1) === "requests";
   return (
-    <Link className="group hover:text-indigo-600 flex gap-4 hover:bg-indigo-50 px-4 py-3 items-center" href={href}>
-      <div className="border-2 border-black px-1 py-[2px] group-hover:border-indigo-600 rounded-lg *:w-5 *:h-5">
-        {Icon}
-      </div>
+    <Link prefetch className="group hover:text-indigo-600 flex gap-4 hover:bg-indigo-50 px-4 py-3 items-center" href={href}>
+      <div className="border-2 border-black px-1 py-[2px] group-hover:border-indigo-600 rounded-lg *:w-5 *:h-5">{Icon}</div>
       <p className="capitalize font-medium">
         {textLink}
         {getLinkPath ? (
