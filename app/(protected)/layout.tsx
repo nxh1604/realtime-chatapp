@@ -13,7 +13,7 @@ export default async function Layout({ children }: { children: ReactNode }) {
   }
 
   return (
-    <div className="flex gap-2">
+    <div className="flex">
       <Sidebar />
       {children}
     </div>
