@@ -74,3 +74,5 @@ export const getFriends = async (userId: string) => {
     return null;
   }
 };
+
+export const getChatChannel = async (userId: string, friendId: string) => {};
