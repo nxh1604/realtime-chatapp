@@ -83,11 +83,7 @@ export const getFriends = async (userId: string) => {
   }
 };
 
-<<<<<<< HEAD
-export const getChatChannel = async (userId: string, friendId: string) => {};
-=======
 export const getChatChannel = async (userId: string, friendId: string) => {
   try {
   } catch (error) {}
 };
->>>>>>> 718857063142890aa2c59daff0aac724d7dd82e6

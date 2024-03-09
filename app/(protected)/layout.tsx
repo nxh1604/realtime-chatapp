@@ -22,9 +22,9 @@ export default async function Layout({ children }: { children: ReactNode }) {
 
 const Sidebar = () => {
   return (
-    <aside className="h-screen border-r-[1px] border-r-black/10 max-w-[300px] w-full min-w-max flex">
+    <aside className="h-screen border-r-2 max-w-[300px] w-full min-w-max flex">
       <MainNav />
-      <div className="flex-1 max-w-[320px]">
+      <div className="flex-1 max-w-[320px] bg-gradient-to-r from-indigo-500 to-cyan-400 border-l-2">
         <SubMainNav />
         <YourChats />
       </div>
