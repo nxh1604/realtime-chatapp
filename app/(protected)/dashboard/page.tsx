@@ -1,3 +1,19 @@
+import { auth } from "@/lib/auth";
+import { getFriendRequestsId } from "@/lib/data";
+import { notFound } from "next/navigation";
+
 export default async function Page() {
-  return <main>Dashboard page</main>;
+  const session = await auth();
+  if (!session) return notFound();
+  const requests = await getFriendRequestsId(session.user.id);
+
+  if (!requests) return <main>Empty friend requets...</main>;
+
+  return (
+    <main>
+      {requests?.map((request) => (
+        <div key={request}>{request}</div>
+      ))}
+    </main>
+  );
 }

@@ -15,6 +15,7 @@ const AddFriendForm = () => {
   const {
     register,
     setError,
+    reset,
     formState: { errors, isLoading: formIsLoading },
     handleSubmit,
   } = useForm<AddFriendDataType>({
@@ -48,6 +49,7 @@ const AddFriendForm = () => {
         }
       }
       toast.success("Friend request sent!");
+      reset();
     } catch (error) {
       if (error instanceof z.ZodError) {
         setError("email", { message: error.message });
@@ -70,6 +72,7 @@ const AddFriendForm = () => {
       <div className="space-x-1">
         <input
           id="email"
+          aria-label="input-email"
           className="disabled:bg-slate-400 bg-[#F7FBFF] mt-[2px] py-2 px-4 outline-indigo-500 outline-2 rounded-lg border-[1px] border-[#D4D7E3]"
           placeholder="you@example.com"
           disabled={isLoading}
