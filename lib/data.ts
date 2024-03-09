@@ -1,18 +1,17 @@
 "use server";
+import { IFriendRequestData, IUserData } from "@/types/db";
 import redis from "./db";
 
-interface IUserData {
-  email: string;
-  emailVerified: Boolean | null;
-  id: string;
-  image: string;
-  name: string;
-}
-interface IFriendRequestData {
-  senderId: string;
-  senderImage: string;
-  senderEmail: string;
-}
+export const getUserById = async (userId: string) => {
+  try {
+    const userData = (await redis.get(`user:${userId}`)) as IUserData;
+
+    return userData;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
 
 export const getFriendRequestsId = async (userId: string) => {
   try {
@@ -20,6 +19,15 @@ export const getFriendRequestsId = async (userId: string) => {
     return friendRequestsId;
   } catch (error) {
     console.log("friendRequestId-GET error: ", error);
+    return null;
+  }
+};
+
+export const checkIsAlreadyFriend = async (userId: string, friendId: string) => {
+  try {
+    const isAlreadyFriend = await redis.sismember(`user:${userId}:friends`, friendId);
+    return isAlreadyFriend;
+  } catch (error) {
     return null;
   }
 };
@@ -73,4 +81,9 @@ export const getFriends = async (userId: string) => {
     console.log("friends-GET error: ", error);
     return null;
   }
+};
+
+export const getChatChannel = async (userId: string, friendId: string) => {
+  try {
+  } catch (error) {}
 };
