@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { sortedIds } from "@/lib/utils";
 import { ChangeEvent, FormEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
 import { useFormStatus } from "react-dom";
+import toast from "react-hot-toast";
 
 const FormToSendMessage = ({
   userId,
@@ -14,27 +15,25 @@ const FormToSendMessage = ({
   friendId: string;
   userId: string;
 }) => {
-  const [message, setMessage] = useState("");
-
-  const handleTextAreaMessage = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    setMessage(e.target.value);
-  };
+  // handle submit here!
   const formAction = async (formData: FormData) => {
-    setMessage("");
     addOptimisticMessages(formData.get("message") as string);
-    // await sendMessage(formData);
-    await new Promise((resolve) => setTimeout(() => resolve(null), 2000));
+    // await new Promise((resovle) =>
+    //   setTimeout(() => {
+    //     resovle("nothing");
+    //   }, 3000)
+    // );
+    const state = await sendMessage(formData);
+    if (state.error) {
+      toast.error(state.message);
+    }
   };
+
   return (
     <div className="border-t-2  pb-8 bg-gradient-to-r from-cyan-400 to-indigo-300">
       <div className="px-3 py-3">Operation to edit text</div>
       <form action={formAction} className="flex gap-6 justify-between px-8 items-center max-w-[1200px] mx-auto group">
-        <InputMessageForm
-          userId={userId}
-          friendId={friendId}
-          message={message}
-          handleTextAreaMessage={handleTextAreaMessage}
-        />
+        <InputForm userId={userId} friendId={friendId} />
       </form>
     </div>
   );
@@ -42,24 +41,18 @@ const FormToSendMessage = ({
 
 export default FormToSendMessage;
 
-const InputMessageForm = ({
-  userId,
-  friendId,
-  message,
-  handleTextAreaMessage,
-}: {
-  userId: string;
-  friendId: string;
-  message: string;
-  handleTextAreaMessage: (e: ChangeEvent<HTMLTextAreaElement>) => void;
-}) => {
+const InputForm = ({ userId, friendId }: { userId: string; friendId: string }) => {
   const { pending } = useFormStatus();
+  const [message, setMessage] = useState("");
 
-  // auto focus texarea moi lan submit form
   const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
-  // ngan textarea enter va submit form
+
   const buttonRef = useRef<HTMLButtonElement | null>(null);
 
+  // handle Text area here!
+  const handleTextAreaMessage = (e: ChangeEvent<HTMLTextAreaElement>) => setMessage(e.target.value);
+
+  // ngan textarea enter va submit form
   const handleTextAreaEnterKey = (e: KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
@@ -67,12 +60,7 @@ const InputMessageForm = ({
     }
   };
 
-  const handleTextAreaHeight = (e: FormEvent<HTMLTextAreaElement>) => {
-    const target = e.target as HTMLTextAreaElement;
-    target.style.height = "auto";
-    target.style.height = `${target.scrollHeight}px`;
-  };
-
+  // auto focus texarea moi lan submit form
   useEffect(() => {
     console.log("useEffect");
     if (!pending) {
@@ -80,6 +68,12 @@ const InputMessageForm = ({
     }
   }, [pending]);
 
+  // chinh textarea height
+  const handleTextAreaHeight = (e: FormEvent<HTMLTextAreaElement>) => {
+    const target = e.target as HTMLTextAreaElement;
+    target.style.height = "auto";
+    target.style.height = `${target.scrollHeight}px`;
+  };
   return (
     <>
       <textarea
@@ -87,7 +81,6 @@ const InputMessageForm = ({
         onInput={handleTextAreaHeight}
         onChange={handleTextAreaMessage}
         maxLength={500}
-        disabled={pending}
         value={message}
         onKeyDown={handleTextAreaEnterKey}
         name="message"
@@ -96,7 +89,7 @@ const InputMessageForm = ({
       />
       <input readOnly name="userId" hidden value={userId} />
       <input readOnly name="friendId" hidden value={friendId} />
-      <Button ref={buttonRef} disabled={pending || !message} type="submit">
+      <Button onClick={() => setMessage("")} ref={buttonRef} disabled={!message} type="submit">
         Send
       </Button>
     </>

@@ -4,6 +4,7 @@ import redis from "@/lib/db";
 import { sortedIds } from "@/lib/utils";
 import { revalidatePath } from "next/cache";
 import { ZodError, z } from "zod";
+import { v4 as uuidv4 } from "uuid";
 
 const friendSchema = z.object({
   id: z.string(),
@@ -28,23 +29,18 @@ export const acceptFriendRequest = async (prevState: { message: string }, formDa
     if (!isInFriendRequests) {
       return { message: "Not in friend requests", error: true };
     }
-
+    const messageForChannelId = uuidv4();
     const removeFriendRequestFromUser = redis.srem(`user:${userId}:incoming_friend_requests`, validatedSenderId.id);
     const addFriendForUser = redis.sadd(`user:${userId}:friends`, validatedSenderId.id);
     const removeFriendRequestFromSender = redis.srem(`user:${validatedSenderId.id}:incoming_friend_requests`, userId);
     const addFriendForSender = redis.sadd(`user:${validatedSenderId.id}:friends`, userId);
-    const createChatChannel = redis.set(`chat:${sortedIds(validatedSenderId.id, userId)}`, {
+    const createChatChannel = redis.set(`room:${sortedIds(validatedSenderId.id, userId)}`, {
+      id: sortedIds(validatedSenderId.id, userId),
       participants: [validatedSenderId.id, userId],
-      message: [],
+      messageId: messageForChannelId,
     });
 
-    await Promise.all([
-      removeFriendRequestFromUser,
-      addFriendForUser,
-      removeFriendRequestFromSender,
-      addFriendForSender,
-      createChatChannel,
-    ]);
+    await Promise.all([removeFriendRequestFromUser, addFriendForUser, removeFriendRequestFromSender, addFriendForSender, createChatChannel]);
     revalidatePath(`/dashboard/requests`);
     return { message: "Friend request accepted", error: false };
 

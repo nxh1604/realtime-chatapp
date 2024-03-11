@@ -11,15 +11,19 @@ export interface IFriendRequestData {
   senderEmail: IUserData["email"];
 }
 
-export interface IChatChannel {
+export interface IChatRoom {
   id: string;
   participants: Array<IUserData["id"]>;
-  message: Array<IMessage["id"]>;
+  messageId: IChatRoomMessage;
+}
+
+export interface IChatRoomMessage {
+  message: IMessage[];
 }
 
 export interface IMessage {
   id: string;
   senderId: IUserData["id"];
   message: string;
-  timeStamp: string;
+  timeStamp: number;
 }
