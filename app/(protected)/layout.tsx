@@ -4,28 +4,29 @@ import { ReactNode } from "react";
 import MainNav from "@/components/MainNav";
 import SubMainNav from "@/components/SubMainNav";
 import UserChatOverviewCard from "@/components/UserChatOverviewCard";
-import { getFriends } from "@/lib/data";
+import { getFriendRequestsId, getFriends } from "@/lib/data";
 export default async function Layout({ children }: { children: ReactNode }) {
   const session = await auth();
 
   if (!session) {
     notFound();
   }
+  const friendRequestsId = await getFriendRequestsId(session.user.id);
 
   return (
     <div className="flex">
-      <Sidebar />
+      <Sidebar friendRequestsId={friendRequestsId} />
       {children}
     </div>
   );
 }
 
-const Sidebar = () => {
+const Sidebar = ({ friendRequestsId }: { friendRequestsId: string[] | null }) => {
   return (
     <aside className="h-screen border-r-2 max-w-[300px] w-full min-w-max flex">
       <MainNav />
       <div className="flex-1 max-w-[320px] bg-gradient-to-r from-indigo-500 to-cyan-400 border-l-2">
-        <SubMainNav />
+        <SubMainNav friendRequestsId={friendRequestsId} />
         <YourChats />
       </div>
     </aside>

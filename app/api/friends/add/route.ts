@@ -1,5 +1,7 @@
 import { auth } from "@/lib/auth";
 import redis from "@/lib/db";
+import { pusherSever } from "@/lib/pusher";
+import { toPusherKey } from "@/lib/utils";
 import { addFriendValidator } from "@/lib/validators/add-friend";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
@@ -45,6 +47,13 @@ export const POST = async (req: NextRequest) => {
     }
 
     //  write data to database
+    console.log("trigger pusher");
+    pusherSever.trigger(toPusherKey(`user:${getUserIdToAdd}:incoming_friend_requests`), "incoming_friend_requests", {
+      senderId: authData.user.id,
+      senderEmail: authData.user.email,
+      senderImage: authData.user.image,
+    });
+
     await redis.sadd(`user:${getUserIdToAdd}:incoming_friend_requests`, authData.user.id);
 
     return new NextResponse(JSON.stringify({ message: "OK" }), { status: 200 });

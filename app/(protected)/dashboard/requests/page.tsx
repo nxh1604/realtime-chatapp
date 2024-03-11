@@ -2,6 +2,7 @@ import { auth } from "@/lib/auth";
 import { getFriendRequests } from "@/lib/data";
 import { notFound } from "next/navigation";
 import FriendRequestItem from "./components/FriendRequestItem";
+import FriendRequestsList from "./components/FriendRequestsList";
 
 export default async function Page() {
   const session = await auth();
@@ -11,17 +12,7 @@ export default async function Page() {
 
   return (
     <div>
-      {friendRequestsData.length ? (
-        friendRequestsData.map((each, index) => {
-          return (
-            each && <FriendRequestItem key={index} src={each.senderImage} email={each.senderEmail} id={each.senderId} />
-          );
-        })
-      ) : (
-        <p>Currently you have no friend request</p>
-      )}
+      <FriendRequestsList userId={session.user.id} friendRequestsData={friendRequestsData} />
     </div>
   );
 }
-
-export const dynamic = "force-dynamic";
