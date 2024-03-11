@@ -10,11 +10,14 @@ const UserChatOverviewCard = ({
 }: { id: string; friendName: string; message: string; src: string } & ComponentProps<"li">) => {
   return (
     <li>
-      <Link prefetch href={`/dashboard/chat/${id}`} className="flex gap-2 items-center cursor-pointer hover:bg-indigo-100 px-3 py-1">
+      <Link
+        prefetch
+        href={`/dashboard/chat/${id}`}
+        className="flex gap-2 items-center cursor-pointe hover:bg-indigo-600 px-3 py-1">
         <Avatar src={src} />
         <div>
           <p className="line-clamp-1 font-medium truncate">{friendName}</p>
-          <p className="line-clamp-1 text-sm text-gray-400 truncate">{message}</p>
+          <p className="line-clamp-1 text-sm text-white truncate">{message}</p>
         </div>
       </Link>
     </li>
