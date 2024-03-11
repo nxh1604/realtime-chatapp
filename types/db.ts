@@ -10,3 +10,7 @@ export interface IFriendRequestData {
   senderImage: string;
   senderEmail: string;
 }
+
+export interface IChatChannel {}
+
+export interface IMessage {}
