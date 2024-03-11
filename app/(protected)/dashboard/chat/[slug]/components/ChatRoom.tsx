@@ -2,38 +2,35 @@
 
 import { useOptimistic, useState } from "react";
 import FormToSendMessage from "./FormToSendMessage";
-import ShowMessage from "./ShowMessage";
+import { IMessage } from "@/types/db.type";
+import ShowMessages from "./ShowMessages";
 
 const ChatRoom = ({
   initialMessages,
   friendId,
   userId,
 }: {
-  initialMessages: Array<{ text: string; senderId: string }>;
+  initialMessages: Array<IMessage & { sending: boolean }>;
   userId: string;
   friendId: string;
 }) => {
-  const modifiedInitialMessages = initialMessages.map((message) => {
-    return {
-      ...message,
-      sending: false,
-    };
-  });
   const [optimisticMessages, addOptimisticMessages] = useOptimistic(
-    modifiedInitialMessages,
-    (state: Array<{ text: string; sending: boolean; senderId: string }>, newMessage: string) => [
-      ...state,
+    initialMessages,
+    (state: Array<IMessage & { sending: boolean }>, newMessage: string) => [
       {
-        text: newMessage,
+        id: "1",
+        message: newMessage,
         sending: true,
         senderId: userId,
+        timeStamp: Date.now(),
       },
+      ...state,
     ]
   );
 
   return (
     <>
-      <ShowMessage messages={optimisticMessages} userId={userId} friendId={friendId} />
+      <ShowMessages messages={optimisticMessages} userId={userId} senderData={friendId} />
       <FormToSendMessage addOptimisticMessages={addOptimisticMessages} friendId={friendId} userId={userId} />
     </>
   );
