@@ -89,7 +89,15 @@ const InputForm = ({ userId, friendId }: { userId: string; friendId: string }) =
       />
       <input readOnly name="userId" hidden value={userId} />
       <input readOnly name="friendId" hidden value={friendId} />
-      <Button onClick={() => setMessage("")} ref={buttonRef} disabled={!message} type="submit">
+      <Button
+        onClick={() => {
+          setMessage("");
+          buttonRef.current?.click();
+        }}
+        ref={buttonRef}
+        disabled={!message}
+        type="submit"
+      >
         Send
       </Button>
     </>

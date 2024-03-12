@@ -1,5 +1,5 @@
 "use server";
-import { IChatRoom, IChatRoomMessage, IFriendRequestData, IMessage, IUserData } from "@/types/db.type";
+import { IChatRoom, IFriendRequestData, IMessage, IUserData } from "@/types/db.type";
 import redis from "./db";
 import { sortedIds } from "./utils";
 
@@ -16,7 +16,7 @@ export const getUserById = async (userId: string) => {
 
 export const getFriendRequestsId = async (userId: string) => {
   try {
-    const friendRequestsId = await redis.smembers(`user:${userId}:incoming_friend_requests`);
+    const friendRequestsId = await redis.smembers(`user:${userId}:incoming_friends_request`);
     return friendRequestsId;
   } catch (error) {
     console.log("error in get Friend request Id ");
@@ -36,7 +36,7 @@ export const checkIsAlreadyFriend = async (userId: string, friendId: string) => 
 
 export const getFriendRequests = async (userId: string) => {
   try {
-    const friendRequestsId = await redis.smembers(`user:${userId}:incoming_friend_requests`);
+    const friendRequestsId = await redis.smembers(`user:${userId}:incoming_friends_request`);
     const friendRequestsData: Array<IFriendRequestData | null> = (
       await Promise.all(
         friendRequestsId.map(async (senderId) => {

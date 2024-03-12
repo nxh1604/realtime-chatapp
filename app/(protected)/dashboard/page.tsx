@@ -7,7 +7,7 @@ export default async function Page() {
   if (!session) return notFound();
   const requests = await getFriendRequestsId(session.user.id);
 
-  if (!requests) return <main>Empty friend requets...</main>;
+  if (!requests) return <main>Empty friend request...</main>;
 
   return (
     <main>

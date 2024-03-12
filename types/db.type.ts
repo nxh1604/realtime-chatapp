@@ -5,6 +5,13 @@ export interface IUserData {
   image: string;
   name: string;
 }
+
+export interface IFriend {
+  id: string;
+  email: string;
+  image: string;
+}
+
 export interface IFriendRequestData {
   senderId: IUserData["id"];
   senderImage: IUserData["image"];

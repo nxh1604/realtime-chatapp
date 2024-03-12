@@ -1,10 +1,10 @@
 "use server";
 
 import redis from "@/lib/db";
-import { sortedIds } from "@/lib/utils";
+import { pusherSever } from "@/lib/pusher";
+import { sortedIds, toPusherKey } from "@/lib/utils";
 import sendMessageSchema from "@/lib/validators/send-message";
 import { IChatRoom } from "@/types/db.type";
-import { revalidatePath } from "next/cache";
 import { v4 as uuidv4 } from "uuid";
 import { ZodError } from "zod";
 
@@ -25,9 +25,10 @@ export const sendMessage = async (formData: FormData) => {
       message: message,
       timeStamp: Date.now(),
     };
+    pusherSever.trigger(toPusherKey(`room:${sortedIds(friendId, userId)}`), "send_message", messageToDb);
+    pusherSever.trigger(toPusherKey(`sidebar_room:${sortedIds(userId, friendId)}`), `add_unReadMessage_${sortedIds(userId, friendId)}`, {});
     await redis.zadd(`room:message:${messageId}`, { score: messageToDb.timeStamp, member: messageToDb.id });
     await redis.set(`message:${messageToDb.id}`, messageToDb);
-    revalidatePath(`/dashboard/chat/${userId}`);
     return { message: "successfullt send message", error: false };
   } catch (error) {
     console.log("error from send Message");

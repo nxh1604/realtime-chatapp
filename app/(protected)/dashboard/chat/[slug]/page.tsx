@@ -29,7 +29,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
             <Image className="rounded-full w-[48px] h-[48px]" src={friendData.image} height={48} width={48} alt="user avatar" />
             <h1 className="first-letter:capitalize">{friendData.email}</h1>
           </div>
-          <ChatRoom initialMessages={initialMessages} friendId={friendId} userId={session.user.id} />
+          <ChatRoom initialMessages={initialMessages} friendId={friendId} userId={session.user.id} friendImage={friendData.image} />
         </>
       ) : null}
     </div>
